@@ -86,7 +86,7 @@ findPokemon = (app) => {
 }
 
 createPokemon = (app) => {
-    app.post('/api/pokemon/create' , auth , (req , res) => {
+    app.post('/api/pokemon/create' , (req , res) => {
         //je récupère un req.body
 
         Pokemon.create({

@@ -27,7 +27,7 @@ async function fetchAndPostPokemons() {
                 hp: pokemon.stats.hp,
                 cp: 4,
                 pictures: pokemon.sprites.regular,
-                location: { region: "Paldea" },
+                location: { region: "Kanto" },
                 stats: {
                     hp: pokemon.stats.hp,
                     attack: pokemon.stats.atk,
@@ -38,7 +38,13 @@ async function fetchAndPostPokemons() {
                 },
                 types: typeArr,
                 talent: talentArr,
-                evolution: pokemon.evolution
+                evolution: {
+                    pre : (pokemon.evolution.pre !== null) ? pokemon.evolution.pre : "null",
+                    next : (pokemon.evolution.next !== null) ? pokemon.evolution.next : "null",
+                    mega : (pokemon.evolution.mega !== null) ? pokemon.evolution.mega : "null",
+
+
+                }
 
 
             };
