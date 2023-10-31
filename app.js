@@ -1,6 +1,5 @@
 const express= require("express");
 const app = express();
-const morgan = require("morgan");
 const favicon = require("serve-favicon");
 const bodyParser = require('body-parser');
 const sequelize = require('./Src/Data/SequelizeData');
@@ -9,7 +8,6 @@ const pokemonRoutes= require('./Src/Routes/PokemonRoutes');
 const userRoutes = require('./Src/Routes/UserRoutes')
 app
     .use(favicon(__dirname + "/favicon.ico"))
-    .use(morgan('dev'))
     .use(bodyParser.json())
 ;
 sequelize.getConnexion();
