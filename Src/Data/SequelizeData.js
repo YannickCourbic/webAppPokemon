@@ -2,11 +2,8 @@ const {Sequelize , DataTypes} = require('sequelize');
 const PokemonModel = require('../Models/Pokemon');
 const UserModel = require('../Models/User');
 const sequelize = new Sequelize('apipokemonbdd' ,'root' , '' , {
-    host : '127.0.0.1',
+    host : 'localhost',
     dialect : 'mysql',
-    dialectOptions: {
-        timezone: '+02:00'
-    },
     logging: true
 } );
 
