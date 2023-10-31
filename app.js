@@ -16,7 +16,7 @@ sequelize.getConnexion();
 
 app.get("/", (req , res) => {
 
-    res.json({message: "Hello Heroku"})
+    res.json("Hello Heroku")
 
 })
 //ici il ya les endpoints :
