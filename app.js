@@ -10,7 +10,7 @@ app
     .use(favicon(__dirname + "/favicon.ico"))
     .use(bodyParser.json())
 ;
-sequelize.getConnexion();
+//sequelize.getConnexion();
 
 app.get("/", (req , res) => {
 
@@ -18,13 +18,13 @@ app.get("/", (req , res) => {
 
 })
 //ici il ya les endpoints :
-pokemonRoutes.forEach(method => {
-    method(app);
-})
+// pokemonRoutes.forEach(method => {
+//     method(app);
+// })
 
-userRoutes.forEach(method => {
-    method(app);
-})
+// userRoutes.forEach(method => {
+//     method(app);
+// })
 
 
 //gestion des erreurs
