@@ -42,8 +42,6 @@ async function fetchAndPostPokemons() {
                     pre : (pokemon.evolution.pre !== null) ? pokemon.evolution.pre : "null",
                     next : (pokemon.evolution.next !== null) ? pokemon.evolution.next : "null",
                     mega : (pokemon.evolution.mega !== null) ? pokemon.evolution.mega : "null",
-
-
                 }
 
 
@@ -51,7 +49,7 @@ async function fetchAndPostPokemons() {
 
             console.log(JSON.stringify(postData));
 
-            const postResponse = await axios.post("http://localhost:3000/api/pokemon/create", postData);
+            const postResponse = await axios.post("https://macabre-goblin-07789-458b56e3f2a6.herokuapp.com/api/pokemon/create", postData);
             console.log('Réponse de l\'API :', postResponse.data);
         }
     } catch (error) {
