@@ -4,8 +4,8 @@
   "description": "api pokémon ",
   "main": "app.js",
   "scripts": {
-    "start": "SET NODE_ENV=production & node app.js",
-    "dev" : "NODE_ENV=development nodemon app.js"
+    "start": "NODE_ENV=production & node app.js",
+    "dev" : "NODE_ENV=development &  nodemon app.js"
   },
   "author": "Yannick Courbic",
   "license": "MIT",
