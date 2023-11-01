@@ -2,7 +2,7 @@ const axios = require('axios');
 
 async function fetchAndPostPokemons() {
     try {
-        const response = await axios.get("https://api-pokemon-fr.vercel.app/api/v1/gen/4");
+        const response = await axios.get("https://api-pokemon-fr.vercel.app/api/v1/gen/1");
         const pokemons = response.data;
         const tabPre = [];
         const tabNext = [];
@@ -22,15 +22,15 @@ async function fetchAndPostPokemons() {
                 typeArr.push(type.name);
             }
 
-            if(pokemon.evolution.pre === null){
+            if(pokemon.evolution.pre === null && pokemon.evolution !== null){
                 pokemon.evolution.pre = "null";
             }
 
-            if(pokemon.evolution.next === null){
+            if(pokemon.evolution.next === null && pokemon.evolution !== null){
                 pokemon.evolution.next = "null";
             }
 
-            if(pokemon.evolution.mega === null){
+            if(pokemon.evolution.mega === null && pokemon.evolution !== null){
                 pokemon.evolution.mega = "null";
             }
 
@@ -39,7 +39,7 @@ async function fetchAndPostPokemons() {
                 hp: pokemon.stats.hp,
                 cp: 4,
                 pictures: pokemon.sprites.regular,
-                location: { region: "Sinnoh" },
+                location: { region: "Kanto" },
                 stats: {
                     hp: pokemon.stats.hp,
                     attack: pokemon.stats.atk,
