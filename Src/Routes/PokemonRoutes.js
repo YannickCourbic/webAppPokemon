@@ -20,9 +20,7 @@ findAllPokemon =  (app) => {
         }
         else if(req.query.type){
          return Pokemon.findAll({where : {
-             types : {
-                 [Op.contains] : [req.query.type]
-             }
+                [Op.or] : [sequelize.fn('JSON_CONTAINS' , sequelize.col('types') , `['${req.params.type}']`)]
              }})
             .then(
                 pokemons => {
