@@ -64,9 +64,12 @@ findAllPokemon =  (app) => {
 
             }
             if(req.query.evolution === "base"){
-                return sequelize.query(`select * from pokemons where evolution->"$.pre" = "null"`, {
-                    type: sequelize.QueryTypes.SELECT
-                }).then(pokemons => {
+                return Pokemon.findAll({
+                    where : {
+                        evolution : {pre : "null"}
+                    }
+                })
+                .then(pokemons => {
                     if(!pokemons.length > 0) return res.status(404).json({message: "liste de pokémon de base non existant ou pas encore ajouté", status:404});
                     res.json({message:`La liste de pokémon de base a été récupéré avec succès` , data: pokemons , status:200})
                 }).catch(error => {
