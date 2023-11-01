@@ -314,7 +314,7 @@ orderByPokemon = (app) => {
 
 searchByPagination = (app) => {
     app.get("/api/pokemon/paginated/by" , (req, res) => {
-        if(!Number.isInteger(req.query.page) || !Number.isInteger(req.query.limit)) return res.status(404).json({message : "Les paramétres limit et page doivent être des nombres entier."})
+        //if(!Number.isInteger(req.query.page) || !Number.isInteger(req.query.limit)) return res.status(404).json({message : "Les paramétres limit et page doivent être des nombres entier."})
         const limit = parseInt(req.query.limit) || 10;
         const page = parseInt(req.query.page) || 1;
         if(limit <= 0 || page <= 0) return res.status(404).json({ message: "Les paramètres limit et page doivent être supérieurs à zéro." });
