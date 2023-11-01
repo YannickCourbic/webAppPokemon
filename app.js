@@ -6,9 +6,11 @@ const sequelize = require('./Src/Data/SequelizeData');
 const port = process.env.PORT || 3000; //port 3000
 const pokemonRoutes= require('./Src/Routes/PokemonRoutes');
 const userRoutes = require('./Src/Routes/UserRoutes')
+const cors = require("cors");
 app
     .use(favicon(__dirname + "/favicon.ico"))
     .use(bodyParser.json())
+    .use(cors())
 ;
 sequelize.getConnexion();
 
