@@ -2,7 +2,7 @@ const axios = require('axios');
 
 async function fetchAndPostPokemons() {
     try {
-        const response = await axios.get("https://api-pokemon-fr.vercel.app/api/v1/gen/9");
+        const response = await axios.get("https://api-pokemon-fr.vercel.app/api/v1/gen/4");
         const pokemons = response.data;
         const tabPre = [];
         const tabNext = [];
@@ -22,12 +22,24 @@ async function fetchAndPostPokemons() {
                 typeArr.push(type.name);
             }
 
+            if(pokemon.evolution.pre === null){
+                pokemon.evolution.pre = "null";
+            }
+
+            if(pokemon.evolution.next === null){
+                pokemon.evolution.next = "null";
+            }
+
+            if(pokemon.evolution.mega === null){
+                pokemon.evolution.mega = "null";
+            }
+
             const postData = {
                 name: pokemon.name.fr,
                 hp: pokemon.stats.hp,
                 cp: 4,
                 pictures: pokemon.sprites.regular,
-                location: { region: "Kanto" },
+                location: { region: "Sinnoh" },
                 stats: {
                     hp: pokemon.stats.hp,
                     attack: pokemon.stats.atk,
@@ -38,12 +50,7 @@ async function fetchAndPostPokemons() {
                 },
                 types: typeArr,
                 talent: talentArr,
-                evolution: {
-                    pre : (pokemon.evolution.pre !== null) ? pokemon.evolution.pre : "null",
-                    next : (pokemon.evolution.next !== null) ? pokemon.evolution.next : "null",
-                    mega : (pokemon.evolution.mega !== null) ? pokemon.evolution.mega : "null",
-                }
-
+                evolution: pokemon.evolution
 
             };
 
@@ -58,3 +65,14 @@ async function fetchAndPostPokemons() {
 }
 
 fetchAndPostPokemons();
+
+
+
+// async function getAxiosPokemon(){
+//     const response  = await axios.get("https://macabre-goblin-07789-458b56e3f2a6.herokuapp.com/api/pokemon/all?name=Bulbizarre");
+//     const pokemonResponse = response.data.data;
+//     console.log( JSON.parse(pokemonResponse[0].evolution))
+// }
+//
+// getAxiosPokemon()
+

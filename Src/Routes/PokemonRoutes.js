@@ -39,6 +39,10 @@ findAllPokemon =  (app) => {
                     // console.log(pokemons)
                     res.json({message: `liste de pokémon avec une limite de ${req.query.limit} on été récupérée avec succès` , data : pokemons})
                 })
+                .catch(error => {
+                    const message = "La liste de pokémon n'a pas été récupéré. Réessayez dans quelques instants.";
+                    res.status(500).json({message , data: error});
+                })
         }
         else if(req.query.evolution){
             if(req.query.evolution === "null"){
@@ -49,9 +53,55 @@ findAllPokemon =  (app) => {
                         if(!pokemons.length > 0) return res.status(404).json({message: `liste de pokémon sans évolution non récupèrè`});
                         res.json({message: `liste de pokémon sans évolution ont été récupérée avec succès` , data : pokemons , status:200})
                     })
+                    .catch(error => {
+                        const message = "La liste de pokémon n'a pas été récupéré. Réessayez dans quelques instants.";
+                        res.status(500).json({message , data: error});
+                    })
 
             }
+            if(req.query.evolution === "base"){
+                return sequelize.query(`select * from pokemons where evolution->"$.pre" = "null"`, {
+                    type: sequelize.QueryTypes.SELECT
+                }).then(pokemons => {
+                    if(!pokemons.length > 0) return res.status(404).json({message: "liste de pokémon de base non existant ou pas encore ajouté", status:404});
+                    res.json({message:`La liste de pokémon de base a été récupéré avec succès` , data: pokemons , status:200})
+                }).catch(error => {
+                        const message = "La liste de pokémon n'a pas été récupéré. Réessayez dans quelques instants.";
+                        res.status(500).json({message , data: error});
+                })
+            }
+            if(req.query.evolution === "stade_2"){
+                return sequelize.query(`SELECT * FROM \`pokemons\` where evolution->"$.pre" != 'null' and evolution->"$.next" != 'null'`)
+                    .then(pokemons => {
+                        if(!pokemons.length > 0) return res.status(404).json({message : "Liste de pokémon stade 2 non existant ou pas encore ajouté", status: 404});
+                        res.json({message:`La liste de pokémon de stade 2 a été récupéré avec succès` , data: pokemons , status:200})
+                    }).catch(error => {
+                        const message = "La liste de pokémon n'a pas été récupéré. Réessayez dans quelques instants.";
+                        res.status(500).json({message , data: error});
+                    })
+            }
+            if(req.query.evolution === "stade_3"){
+                return sequelize.query(`SELECT * FROM pokemons where evolution - > "$.pre" != 'null' and evolution->"$.next" = 'null' and JSON_LENGTH(evolution->"$.pre") = 2`)
+                    .then(pokemons => {
+                        if(!pokemons.length > 0) return res.status(404).json({message : "Liste de pokémon stade 3 non existant ou pas encore ajouté", status: 404});
+                        res.json({message:`La liste de pokémon de stade 3 a été récupéré avec succès` , data: pokemons , status:200})
+                    }).catch(error => {
+                        const message = "La liste de pokémon n'a pas été récupéré. Réessayez dans quelques instants.";
+                        res.status(500).json({message , data: error});
+                    })
+            }
+            if(req.query.evolution === "evo_2"){
+                return sequelize.query(`SELECT * FROM pokemons where evolution - > "$.pre" != 'null' and evolution->"$.next" = 'null' and JSON_LENGTH(evolution->"$.pre") = 1`)
+                    .then(pokemons => {
+                        if(!pokemons.length > 0) return res.status(404).json({message : "Liste de pokémon qui n'ont que 2 évolutions non existant ou pas encore ajouté", status: 404});
+                        res.json({message:`La liste de pokémon qui ont seulement 2 évolution a été récupéré avec succès` , data: pokemons , status:200})
+                    }).catch(error => {
+                        const message = "La liste de pokémon n'a pas été récupéré. Réessayez dans quelques instants.";
+                        res.status(500).json({message , data: error});
+                    })
+            }
         }
+
         else{
             Pokemon.findAll({order: ['name']})
                 .then(pokemons => {
@@ -86,7 +136,7 @@ findPokemon = (app) => {
 }
 
 createPokemon = (app) => {
-    app.post('/api/pokemon/create' , (req , res) => {
+    app.post('/api/pokemon/create', (req , res) => {
         //je récupère un req.body
 
         Pokemon.create({
