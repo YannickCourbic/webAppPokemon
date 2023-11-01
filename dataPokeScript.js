@@ -22,16 +22,22 @@ async function fetchAndPostPokemons() {
                 typeArr.push(type.name);
             }
 
-            if(pokemon.evolution.pre === null && pokemon.evolution !== null){
-                pokemon.evolution.pre = "null";
-            }
+            if(pokemon.evolution !== null){
 
-            if(pokemon.evolution.next === null && pokemon.evolution !== null){
-                pokemon.evolution.next = "null";
-            }
+                if(pokemon.evolution.pre === null){
+                    pokemon.evolution.pre = "null";
+                }
 
-            if(pokemon.evolution.mega === null && pokemon.evolution !== null){
-                pokemon.evolution.mega = "null";
+                if(pokemon.evolution.next === null){
+                    pokemon.evolution.next = "null";
+                }
+
+                if(pokemon.evolution.mega === null){
+                    pokemon.evolution.mega = "null";
+                }
+            }
+            else{
+                pokemon.evolution = null;
             }
 
             const postData = {
