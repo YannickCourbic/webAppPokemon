@@ -18,20 +18,25 @@ findAllPokemon =  (app) => {
                     res.status(500).json({message , data: error});
                 })
         }
-        // else if(req.query.type){
-        //     return sequelize.query(`SELECT * FROM pokemons WHERE JSON_CONTAINS( types, '"${req.query.type}"', '$')`  , {type:sequelize.QueryTypes.SELECT}).then(
-        //         pokemons => {
-        //             if(!pokemons.length > 0) return res.status(404).json({message: "le types cherché n'existe pas ou n'a pas encore ajouté !"})
-        //             // console.log(pokemons)
-        //             res.json({message: `des pokémons de type ${req.query.type} on été trouvé avec succès` , data : pokemons})
-        //         }
-        //     ).catch(error => {
-        //         const message = "Le pokémon n'a pas pu être trouver par le type. Réessayez dans quelques instants.";
-        //         res.status(500).json({message , data: error});
-        //     })
-        // }
+        else if(req.query.type){
+         return Pokemon.findAll({where : {
+             types : {
+                 [Op.contains] : [req.query.type]
+             }
+             }})
+            .then(
+                pokemons => {
+                    if(!pokemons.length > 0) return res.status(404).json({message: "le types cherché n'existe pas ou n'a pas encore ajouté !"})
+                    // console.log(pokemons)
+                    res.json({message: `des pokémons de type ${req.query.type} on été trouvé avec succès` , data : pokemons})
+                }
+            ).catch(error => {
+                const message = "Le pokémon n'a pas pu être trouver par le type. Réessayez dans quelques instants.";
+                res.status(500).json({message , data: error});
+            })
+        }
         else if(req.query.limit){
-          Pokemon.findAll({limit : parseInt(req.query.limit)} )
+          return Pokemon.findAll({limit : parseInt(req.query.limit)} )
                 .then(pokemons => {
                     if(!pokemons.length > 0) return res.status(404).json({message: `liste de pokémon hors-limite`})
                     // console.log(pokemons)
