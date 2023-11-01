@@ -18,18 +18,18 @@ findAllPokemon =  (app) => {
                     res.status(500).json({message , data: error});
                 })
         }
-        else if(req.query.type){
-            return sequelize.query(`SELECT * FROM pokemons WHERE JSON_CONTAINS( types, '"${req.query.type}"', '$')`  , {type:sequelize.QueryTypes.SELECT}).then(
-                pokemons => {
-                    if(!pokemons.length > 0) return res.status(404).json({message: "le types cherché n'existe pas ou n'a pas encore ajouté !"})
-                    // console.log(pokemons)
-                    res.json({message: `des pokémons de type ${req.query.type} on été trouvé avec succès` , data : pokemons})
-                }
-            ).catch(error => {
-                const message = "Le pokémon n'a pas pu être trouver par le type. Réessayez dans quelques instants.";
-                res.status(500).json({message , data: error});
-            })
-        }
+        // else if(req.query.type){
+        //     return sequelize.query(`SELECT * FROM pokemons WHERE JSON_CONTAINS( types, '"${req.query.type}"', '$')`  , {type:sequelize.QueryTypes.SELECT}).then(
+        //         pokemons => {
+        //             if(!pokemons.length > 0) return res.status(404).json({message: "le types cherché n'existe pas ou n'a pas encore ajouté !"})
+        //             // console.log(pokemons)
+        //             res.json({message: `des pokémons de type ${req.query.type} on été trouvé avec succès` , data : pokemons})
+        //         }
+        //     ).catch(error => {
+        //         const message = "Le pokémon n'a pas pu être trouver par le type. Réessayez dans quelques instants.";
+        //         res.status(500).json({message , data: error});
+        //     })
+        // }
         else if(req.query.limit){
             return sequelize.query(`select * from pokemons limit ${req.query.limit}` , {
                 type:sequelize.QueryTypes.SELECT
@@ -44,63 +44,63 @@ findAllPokemon =  (app) => {
                     res.status(500).json({message , data: error});
                 })
         }
-        else if(req.query.evolution){
-            if(req.query.evolution === "null"){
-                return sequelize.query(`SELECT * FROM pokemons where evolution is Null` , {
-                    type: sequelize.QueryTypes.SELECT
-                })
-                    .then(pokemons => {
-                        if(!pokemons.length > 0) return res.status(404).json({message: `liste de pokémon sans évolution non récupèrè`});
-                        res.json({message: `liste de pokémon sans évolution ont été récupérée avec succès` , data : pokemons , status:200})
-                    })
-                    .catch(error => {
-                        const message = "La liste de pokémon n'a pas été récupéré. Réessayez dans quelques instants.";
-                        res.status(500).json({message , data: error});
-                    })
-
-            }
-            if(req.query.evolution === "base"){
-                return sequelize.query(`select * from pokemons where evolution->"$.pre" = "null"`, {
-                    type: sequelize.QueryTypes.SELECT
-                }).then(pokemons => {
-                    if(!pokemons.length > 0) return res.status(404).json({message: "liste de pokémon de base non existant ou pas encore ajouté", status:404});
-                    res.json({message:`La liste de pokémon de base a été récupéré avec succès` , data: pokemons , status:200})
-                }).catch(error => {
-                        const message = "La liste de pokémon n'a pas été récupéré. Réessayez dans quelques instants.";
-                        res.status(500).json({message , data: error});
-                })
-            }
-            if(req.query.evolution === "stade_2"){
-                return sequelize.query(`SELECT * FROM \`pokemons\` where evolution->"$.pre" != 'null' and evolution->"$.next" != 'null'`)
-                    .then(pokemons => {
-                        if(!pokemons.length > 0) return res.status(404).json({message : "Liste de pokémon stade 2 non existant ou pas encore ajouté", status: 404});
-                        res.json({message:`La liste de pokémon de stade 2 a été récupéré avec succès` , data: pokemons , status:200})
-                    }).catch(error => {
-                        const message = "La liste de pokémon n'a pas été récupéré. Réessayez dans quelques instants.";
-                        res.status(500).json({message , data: error});
-                    })
-            }
-            if(req.query.evolution === "stade_3"){
-                return sequelize.query(`SELECT * FROM 'pokemons' WHERE JSON_EXTRACT(evolution , '$.pre') != 'null' AND JSON_EXTRACT(evolution , '$.next') = 'null' AND JSON_LENGTH(JSON_EXTRACT(evolution , '$.pre')) = 2`)
-                    .then(pokemons => {
-                        if(!pokemons.length > 0) return res.status(404).json({message : "Liste de pokémon stade 3 non existant ou pas encore ajouté", status: 404});
-                        res.json({message:`La liste de pokémon de stade 3 a été récupéré avec succès` , data: pokemons , status:200})
-                    }).catch(error => {
-                        const message = "La liste de pokémon n'a pas été récupéré. Réessayez dans quelques instants.";
-                        res.status(500).json({message , data: error});
-                    })
-            }
-            if(req.query.evolution === "evo_2"){
-                return sequelize.query(`SELECT * FROM pokemons where evolution - > "$.pre" != 'null' and evolution->"$.next" = 'null' and JSON_LENGTH(evolution->"$.pre") = 1`)
-                    .then(pokemons => {
-                        if(!pokemons.length > 0) return res.status(404).json({message : "Liste de pokémon qui n'ont que 2 évolutions non existant ou pas encore ajouté", status: 404});
-                        res.json({message:`La liste de pokémon de stade 3 a été récupéré avec succès` , data: pokemons , status:200})
-                    }).catch(error => {
-                        const message = "La liste de pokémon n'a pas été récupéré. Réessayez dans quelques instants.";
-                        res.status(500).json({message , data: error});
-                    })
-            }
-        }
+        // else if(req.query.evolution){
+        //     if(req.query.evolution === "null"){
+        //         return sequelize.query(`SELECT * FROM pokemons where evolution is Null` , {
+        //             type: sequelize.QueryTypes.SELECT
+        //         })
+        //             .then(pokemons => {
+        //                 if(!pokemons.length > 0) return res.status(404).json({message: `liste de pokémon sans évolution non récupèrè`});
+        //                 res.json({message: `liste de pokémon sans évolution ont été récupérée avec succès` , data : pokemons , status:200})
+        //             })
+        //             .catch(error => {
+        //                 const message = "La liste de pokémon n'a pas été récupéré. Réessayez dans quelques instants.";
+        //                 res.status(500).json({message , data: error});
+        //             })
+        //
+        //     }
+        //     if(req.query.evolution === "base"){
+        //         return sequelize.query(`select * from pokemons where evolution->"$.pre" = "null"`, {
+        //             type: sequelize.QueryTypes.SELECT
+        //         }).then(pokemons => {
+        //             if(!pokemons.length > 0) return res.status(404).json({message: "liste de pokémon de base non existant ou pas encore ajouté", status:404});
+        //             res.json({message:`La liste de pokémon de base a été récupéré avec succès` , data: pokemons , status:200})
+        //         }).catch(error => {
+        //                 const message = "La liste de pokémon n'a pas été récupéré. Réessayez dans quelques instants.";
+        //                 res.status(500).json({message , data: error});
+        //         })
+        //     }
+        //     if(req.query.evolution === "stade_2"){
+        //         return sequelize.query(`SELECT * FROM \`pokemons\` where evolution->"$.pre" != 'null' and evolution->"$.next" != 'null'`)
+        //             .then(pokemons => {
+        //                 if(!pokemons.length > 0) return res.status(404).json({message : "Liste de pokémon stade 2 non existant ou pas encore ajouté", status: 404});
+        //                 res.json({message:`La liste de pokémon de stade 2 a été récupéré avec succès` , data: pokemons , status:200})
+        //             }).catch(error => {
+        //                 const message = "La liste de pokémon n'a pas été récupéré. Réessayez dans quelques instants.";
+        //                 res.status(500).json({message , data: error});
+        //             })
+        //     }
+        //     if(req.query.evolution === "stade_3"){
+        //         return sequelize.query(`SELECT * FROM 'pokemons' WHERE JSON_EXTRACT(evolution , '$.pre') != 'null' AND JSON_EXTRACT(evolution , '$.next') = 'null' AND JSON_LENGTH(JSON_EXTRACT(evolution , '$.pre')) = 2`)
+        //             .then(pokemons => {
+        //                 if(!pokemons.length > 0) return res.status(404).json({message : "Liste de pokémon stade 3 non existant ou pas encore ajouté", status: 404});
+        //                 res.json({message:`La liste de pokémon de stade 3 a été récupéré avec succès` , data: pokemons , status:200})
+        //             }).catch(error => {
+        //                 const message = "La liste de pokémon n'a pas été récupéré. Réessayez dans quelques instants.";
+        //                 res.status(500).json({message , data: error});
+        //             })
+        //     }
+        //     if(req.query.evolution === "evo_2"){
+        //         return sequelize.query(`SELECT * FROM pokemons where evolution - > "$.pre" != 'null' and evolution->"$.next" = 'null' and JSON_LENGTH(evolution->"$.pre") = 1`)
+        //             .then(pokemons => {
+        //                 if(!pokemons.length > 0) return res.status(404).json({message : "Liste de pokémon qui n'ont que 2 évolutions non existant ou pas encore ajouté", status: 404});
+        //                 res.json({message:`La liste de pokémon de stade 3 a été récupéré avec succès` , data: pokemons , status:200})
+        //             }).catch(error => {
+        //                 const message = "La liste de pokémon n'a pas été récupéré. Réessayez dans quelques instants.";
+        //                 res.status(500).json({message , data: error});
+        //             })
+        //     }
+        // }
 
         else{
             Pokemon.findAll({order: ['id']})
