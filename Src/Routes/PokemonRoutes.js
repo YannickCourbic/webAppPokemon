@@ -31,7 +31,7 @@ findAllPokemon =  (app) => {
         //     })
         // }
         else if(req.query.limit){
-          Pokemon.findAll({where : {limit : req.query.limit} })
+          Pokemon.findAll({limit : req.query.limit} )
                 .then(pokemons => {
                     if(!pokemons.length > 0) return res.status(404).json({message: `liste de pokémon hors-limite`})
                     // console.log(pokemons)
