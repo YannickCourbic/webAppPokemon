@@ -252,7 +252,7 @@ limitPokemon = (app) => {
 
 searchPokemonByTypes = (app) => {
     app.get("/api/pokemon/types/:type" , auth,   (req , res) => {
-       sequelize.query(`SELECT * FROM pokemons WHERE JSON_CONTAINS( types, '"${req.params.type}"', '$')`  , {type:sequelize.QueryTypes.SELECT}).then(
+       sequelize.query(`SELECT * FROM pokemons WHERE types = "[\"${req.params.type}\"]" , {type:sequelize.QueryTypes.SELECT}).then(
            pokemons => {
                if(!pokemons.length > 0) return res.status(404).json({message: "le types cherché n'existe pas ou n'a pas encore ajouté !"})
                // console.log(pokemons)
