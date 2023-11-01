@@ -2,7 +2,7 @@ const axios = require('axios');
 
 async function fetchAndPostPokemons() {
     try {
-        const response = await axios.get("https://api-pokemon-fr.vercel.app/api/v1/gen/1");
+        const response = await axios.get("https://api-pokemon-fr.vercel.app/api/v1/gen/9");
         const pokemons = response.data;
         const tabPre = [];
         const tabNext = [];
@@ -45,7 +45,7 @@ async function fetchAndPostPokemons() {
                 hp: pokemon.stats.hp,
                 cp: 4,
                 pictures: pokemon.sprites.regular,
-                location: { region: "Kanto" },
+                location: { region: "Paldea" },
                 stats: {
                     hp: pokemon.stats.hp,
                     attack: pokemon.stats.atk,

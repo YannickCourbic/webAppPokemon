@@ -26,7 +26,7 @@ else{
 const Pokemon = PokemonModel(sequelize , DataTypes);
 const User = UserModel(sequelize , DataTypes)
 const getConnexion = () => {
-    return sequelize.sync({force:true}).then(_=>{
+    return sequelize.sync({force:false}).then(_=>{
         console.log("La base de donnée a été initialisée !");
     });
 }
