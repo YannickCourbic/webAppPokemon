@@ -81,7 +81,7 @@ findAllPokemon =  (app) => {
                     })
             }
             if(req.query.evolution === "stade_3"){
-                return sequelize.query(`SELECT * FROM pokemons WHERE JSON_EXTRACT(evolution , '$.pre') != 'null' AND JSON_EXTRACT(evolution , '$.next') = 'null' AND JSON_LENGTH(JSON_EXTRACT(evolution , '$.pre')) = 2`)
+                return sequelize.query(`SELECT * FROM "pokemons" WHERE JSON_EXTRACT(evolution , '$.pre') != 'null' AND JSON_EXTRACT(evolution , '$.next') = 'null' AND JSON_LENGTH(JSON_EXTRACT(evolution , '$.pre')) = 2`)
                     .then(pokemons => {
                         if(!pokemons.length > 0) return res.status(404).json({message : "Liste de pokémon stade 3 non existant ou pas encore ajouté", status: 404});
                         res.json({message:`La liste de pokémon de stade 3 a été récupéré avec succès` , data: pokemons , status:200})
