@@ -31,9 +31,7 @@ findAllPokemon =  (app) => {
         //     })
         // }
         else if(req.query.limit){
-            return sequelize.query(`select * from pokemons limit ${req.query.limit}` , {
-                type:sequelize.QueryTypes.SELECT
-            })
+          Pokemon.findAll({where : {limit : req.query.limit} })
                 .then(pokemons => {
                     if(!pokemons.length > 0) return res.status(404).json({message: `liste de pokémon hors-limite`})
                     // console.log(pokemons)
@@ -238,14 +236,14 @@ searchPokemon = (app) => {
 }
 
 limitPokemon = (app) => {
-    app.get("/api/pokemon/limit/:number" , (req , res) => {
-        sequelize.query(`select * from pokemons limit ${req.params.number}` , {
+    app.get("/api/pokemon/limit/:num" , (req , res) => {
+        sequelize.query(`select * from pokemons limit ${req.params.num}` , {
             type:sequelize.QueryTypes.SELECT
         })
             .then(pokemons => {
                 if(!pokemons.length > 0) return res.status(404).json({message: `liste de pokémon hors-limite`})
                 // console.log(pokemons)
-                res.json({message: `liste de pokémon avec une limite de ${req.params.number} on été récupérée avec succès` , data : pokemons})
+                res.json({message: `liste de pokémon avec une limite de ${req.params.num} on été récupérée avec succès` , data : pokemons})
             })
     })
 }
