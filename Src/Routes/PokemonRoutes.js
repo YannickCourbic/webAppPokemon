@@ -1,5 +1,5 @@
 const {Pokemon , sequelize} = require('../Data/SequelizeData');
-const {Op, QueryTypes, Sequelize } = require('sequelize');
+const {Op, fn , col ,QueryTypes, Sequelize } = require('sequelize');
 const {ValidationError, UniqueConstraintError} = require("sequelize");
 const auth = require('../Auth/Auth');
 findAllPokemon =  (app) => {
@@ -78,7 +78,18 @@ findAllPokemon =  (app) => {
                 })
             }
             if(req.query.evolution === "stade_2"){
-                return sequelize.query(`SELECT * FROM \`pokemons\` where evolution->"$.pre" != 'null' and evolution->"$.next" != 'null'`)
+               return Pokemon.findAll({
+                   where : {
+                       evolution : {
+                           pre : {
+                               [Op.not] : "null"
+                           },
+                           next:{
+                               [Op.not] : "null"
+                           }
+                       }
+                   }
+               })
                     .then(pokemons => {
                         if(!pokemons.length > 0) return res.status(404).json({message : "Liste de pokémon stade 2 non existant ou pas encore ajouté", status: 404});
                         res.json({message:`La liste de pokémon de stade 2 a été récupéré avec succès` , data: pokemons , status:200})
@@ -88,7 +99,19 @@ findAllPokemon =  (app) => {
                     })
             }
             if(req.query.evolution === "stade_3"){
-                return sequelize.query(`SELECT * FROM 'pokemons' WHERE JSON_EXTRACT(evolution , '$.pre') != 'null' AND JSON_EXTRACT(evolution , '$.next') = 'null' AND JSON_LENGTH(JSON_EXTRACT(evolution , '$.pre')) = 2`)
+                return Pokemon.findAll({
+                    where : {
+                        evolution : {
+                            pre : {
+                                [Op.not] : "null",
+                            },
+                            next:{
+                                [Op.not] : "null",
+                            }
+                        }
+                    },
+
+                })
                     .then(pokemons => {
                         if(!pokemons.length > 0) return res.status(404).json({message : "Liste de pokémon stade 3 non existant ou pas encore ajouté", status: 404});
                         res.json({message:`La liste de pokémon de stade 3 a été récupéré avec succès` , data: pokemons , status:200})
@@ -289,6 +312,25 @@ orderByPokemon = (app) => {
 
 }
 
+searchByPagination = (app) => {
+    app.get("/api/pokemon/paginated/by" , (req, res) => {
+        if(!Number.isInteger(req.query.page) || !Number.isInteger(req.query.limit)) return res.status(404).json({message : "Les paramétres limit et page doivent être des nombres entier."})
+        const limit = parseInt(req.query.limit) || 10;
+        const page = parseInt(req.query.page) || 1;
+        if(limit <= 0 || page <= 0) return res.status(404).json({ message: "Les paramètres limit et page doivent être supérieurs à zéro." });
+        const offset = (page - 1) * limit;
+        Pokemon.findAndCountAll({
+            limit, offset
+        }).then(({count , rows}) => {
+            if(page > (count/limit)) return res.status(404).json({message : "la page supérieur au nombre total de pokémon."})
+            res.json({message: "Vous avez les pokémons avec succès." , data : {count : count , rows : rows} , status: 200})
+        }) .catch((error) => {
+            res.status(500).json({ error: "Erreur lors de la récupération des éléments.", data: error });
+        });
+
+    })
+}
+
 module.exports =[
     findAllPokemon,
     findPokemon,
@@ -298,7 +340,8 @@ module.exports =[
     searchPokemon,
     searchPokemonByTypes,
     limitPokemon,
-    orderByPokemon
+    orderByPokemon,
+    searchByPagination
 ]
 
 /**
