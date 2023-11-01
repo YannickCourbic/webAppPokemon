@@ -46,7 +46,7 @@ findAllPokemon =  (app) => {
         }
         else if(req.query.evolution){
             if(req.query.evolution === "null"){
-                return sequelize.query(`SELECT * FROM pokemons where evolution is Null` , {
+                return sequelize.query(`SELECT * FROM pokemons where evolution is null` , {
                     type: sequelize.QueryTypes.SELECT
                 })
                     .then(pokemons => {
@@ -60,7 +60,7 @@ findAllPokemon =  (app) => {
 
             }
             if(req.query.evolution === "base"){
-                return sequelize.query(`select * from pokemons where evolution->"$.pre" = "null"`, {
+                return sequelize.query(`select * from pokemons where JSON_EXTRACT(evolution , "$.pre") = "null"`, {
                     type: sequelize.QueryTypes.SELECT
                 }).then(pokemons => {
                     if(!pokemons.length > 0) return res.status(404).json({message: "liste de pokémon de base non existant ou pas encore ajouté", status:404});
@@ -71,7 +71,7 @@ findAllPokemon =  (app) => {
                 })
             }
             if(req.query.evolution === "stade_2"){
-                return sequelize.query(`SELECT * FROM \`pokemons\` where evolution->"$.pre" != 'null' and evolution->"$.next" != 'null'`)
+                return sequelize.query(`SELECT * FROM pokemons where JSON_EXTRACT(evolution , "$.pre") != "null" and JSON_EXTRACT(evolution , "$.pre") != "null"`)
                     .then(pokemons => {
                         if(!pokemons.length > 0) return res.status(404).json({message : "Liste de pokémon stade 2 non existant ou pas encore ajouté", status: 404});
                         res.json({message:`La liste de pokémon de stade 2 a été récupéré avec succès` , data: pokemons , status:200})
@@ -81,7 +81,7 @@ findAllPokemon =  (app) => {
                     })
             }
             if(req.query.evolution === "stade_3"){
-                return sequelize.query(`SELECT * FROM pokemons where evolution - > "$.pre" != 'null' and evolution->"$.next" = 'null' and JSON_LENGTH(evolution->"$.pre") = 2`)
+                return sequelize.query(`SELECT * FROM pokemons where JSON_EXTRACT(evolution , "$.pre") != 'null' and JSON_EXTRACT(evolution , "$.next") = 'null' and JSON_LENGTH(JSON_EXTRACT(evolution , "$.pre")) = 2`)
                     .then(pokemons => {
                         if(!pokemons.length > 0) return res.status(404).json({message : "Liste de pokémon stade 3 non existant ou pas encore ajouté", status: 404});
                         res.json({message:`La liste de pokémon de stade 3 a été récupéré avec succès` , data: pokemons , status:200})
@@ -91,7 +91,7 @@ findAllPokemon =  (app) => {
                     })
             }
             if(req.query.evolution === "evo_2"){
-                return sequelize.query(`SELECT * FROM pokemons where evolution - > "$.pre" != 'null' and evolution->"$.next" = 'null' and JSON_LENGTH(evolution->"$.pre") = 1`)
+                return sequelize.query(`SELECT * FROM pokemons where JSON_EXTRACT(evolution , "$.pre") != 'null' and JSON_EXTRACT(evolution , "$.next") = 'null' and JSON_LENGTH(JSON_EXTRACT(evolution , "$.pre")) = 1`)
                     .then(pokemons => {
                         if(!pokemons.length > 0) return res.status(404).json({message : "Liste de pokémon qui n'ont que 2 évolutions non existant ou pas encore ajouté", status: 404});
                         res.json({message:`La liste de pokémon qui ont seulement 2 évolution a été récupéré avec succès` , data: pokemons , status:200})
